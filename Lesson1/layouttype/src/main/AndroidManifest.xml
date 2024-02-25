@@ -10,9 +10,7 @@
       android:theme="@style/Theme.Lesson1">
     <activity
         android:name=".MainActivity"
-        android:exported="true"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.Lesson1">
+        android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
 
