@@ -11,6 +11,9 @@
       <entry key="dialog">
         <State />
       </entry>
+      <entry key="dialogapp">
+        <State />
+      </entry>
       <entry key="intentfilter">
         <State />
       </entry>
