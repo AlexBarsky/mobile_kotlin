@@ -1,4 +1,4 @@
-package ru.mirea.bogomolovaa.buttonclicker
+package com.example.buttonclicker
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,10 +8,9 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 
-abstract class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity() {
     private lateinit var textViewStudent: TextView
-    private lateinit var btnWhoAmI: Button
+    private lateinit var btnWhoAmi: Button
     private lateinit var btnItIsNotMe: Button
     private lateinit var checkBox: CheckBox
 
@@ -20,23 +19,24 @@ abstract class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         textViewStudent = findViewById(R.id.tvOut)
-        btnWhoAmI = findViewById(R.id.btnWhoAmI)
+        btnWhoAmi = findViewById(R.id.btnWhoAmI)
         btnItIsNotMe = findViewById(R.id.btnItIsNotMe)
+        checkBox = findViewById(R.id.checkBox)
 
         val oclBtnWhoAmI: View.OnClickListener = View.OnClickListener {
             textViewStudent.text = "My list number is 3"
             checkBox.isChecked = true
         }
 
-        btnWhoAmI.setOnClickListener(oclBtnWhoAmI)
+        btnWhoAmi.setOnClickListener(oclBtnWhoAmI)
     }
 
-    fun onBtnItIsNotMeClick() =
+    fun onBtnItIsNotMeClicked(view: View) =
         btnItIsNotMe.setOnClickListener {
             textViewStudent.text = "It wasn`t me"
             checkBox.isChecked = false
         }
 
-    fun onMyButtonClick() =
-        Toast.makeText(this, "Another way!", Toast.LENGTH_SHORT).show()
+    fun onMyButtonClick(view: View) =
+        Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show()
 }

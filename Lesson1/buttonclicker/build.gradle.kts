@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "ru.mirea.bogomolovaa.buttonclicker"
+    namespace = "com.example.buttonclicker"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "ru.mirea.bogomolovaa.buttonclicker"
-        minSdk = 26
+        applicationId = "com.example.buttonclicker"
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

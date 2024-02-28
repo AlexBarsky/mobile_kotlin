@@ -10,12 +10,12 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Hello World!"
-      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.691"
       android:id="@+id/tvOut"
-      app:layout_constraintVertical_bias="0.475" />
+      app:layout_constraintBottom_toTopOf="@+id/checkBox" />
 
   <Button
       android:text="IT`S NOT ME"
@@ -23,12 +23,10 @@
       android:layout_height="wrap_content"
       android:id="@+id/btnItIsNotMe"
       app:layout_constraintEnd_toEndOf="parent"
-      android:layout_marginEnd="48dp"
-      app:layout_constraintStart_toEndOf="@+id/btnWhoAmI"
-      app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintBottom_toBottomOf="parent"
-      android:layout_marginBottom="368dp"
-      android:onClick="onBtnItIsNotMeClick" />
+      android:layout_marginEnd="44dp"
+      android:layout_marginBottom="376dp"
+      android:onClick="onBtnItIsNotMeClicked" />
 
   <Button
       android:text="WHO AM I?"
@@ -36,19 +34,19 @@
       android:layout_height="wrap_content"
       android:id="@+id/btnWhoAmI"
       app:layout_constraintStart_toStartOf="parent"
-      android:layout_marginStart="48dp"
       app:layout_constraintBottom_toBottomOf="parent"
-      android:layout_marginBottom="368dp" />
+      android:layout_marginBottom="376dp"
+      android:layout_marginStart="44dp" />
 
   <CheckBox
-      android:text="CheckBox"
+      android:text="Me?"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:id="@+id/checkBox"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.498"
-      android:layout_marginBottom="288dp" />
+      android:layout_marginBottom="296dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

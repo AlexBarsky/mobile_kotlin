@@ -1,4 +1,4 @@
-package ru.mirea.bogomolovaa.buttonclicker
+package com.example.buttonclicker
 
 import org.junit.Test
 
