@@ -7,7 +7,7 @@
     android:padding="16dp">
 
   <ImageView
-      android:src="@tools:sample/avatars"
+      android:src="@drawable/ic_launcher_background"
       android:layout_width="match_parent"
       android:layout_height="375dp"
       android:id="@+id/avatar"
@@ -73,7 +73,7 @@
         android:layout_weight="3">
 
       <ImageView
-          android:src="@tools:sample/avatars"
+          android:src="@drawable/ic_launcher_foreground"
           android:layout_width="50dp"
           android:layout_height="wrap_content"
           android:id="@+id/imageView3" />
