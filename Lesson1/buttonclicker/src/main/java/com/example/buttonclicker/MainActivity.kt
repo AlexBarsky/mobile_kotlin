@@ -31,11 +31,10 @@ class MainActivity : AppCompatActivity() {
         btnWhoAmi.setOnClickListener(oclBtnWhoAmI)
     }
 
-    fun onBtnItIsNotMeClicked(view: View) =
-        btnItIsNotMe.setOnClickListener {
-            textViewStudent.text = "It wasn`t me"
-            checkBox.isChecked = false
-        }
+    fun onBtnItIsNotMeClicked(view: View) {
+        textViewStudent.text = "It wasn`t me"
+        checkBox.isChecked = false
+    }
 
     fun onMyButtonClick(view: View) =
         Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show()
