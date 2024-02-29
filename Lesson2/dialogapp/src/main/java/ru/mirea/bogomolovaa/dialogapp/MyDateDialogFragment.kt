@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.DialogFragment
 
 class MyDateDialogFragment : DialogFragment() {
@@ -15,7 +14,7 @@ class MyDateDialogFragment : DialogFragment() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
-        
+
         return DatePickerDialog(
             requireActivity(),
             { view, year, month, dayOfMonth ->
