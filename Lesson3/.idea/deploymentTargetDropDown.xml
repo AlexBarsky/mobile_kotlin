@@ -8,6 +8,9 @@
       <entry key="intentapp">
         <State />
       </entry>
+      <entry key="sharer">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
