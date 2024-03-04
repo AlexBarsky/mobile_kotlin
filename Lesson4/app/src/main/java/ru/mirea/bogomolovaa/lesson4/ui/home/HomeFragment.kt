@@ -31,10 +31,10 @@ class HomeFragment : Fragment() {
             binding.editTextMirea.setText(it)
         }
 
-        homeViewModel.onClickText.observe(viewLifecycleOwner) {
-            Log.d(TAG, "onClickText: $it")
+        val text = homeViewModel.onClickText.value as String
+        binding.buttonMirea.setOnClickListener {
+            Log.d(TAG, "onClick: $text")
         }
-
         return root
     }
 
