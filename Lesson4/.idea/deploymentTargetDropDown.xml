@@ -8,6 +8,9 @@
       <entry key="data_thread">
         <State />
       </entry>
+      <entry key="looper">
+        <State />
+      </entry>
       <entry key="thread">
         <State />
       </entry>
