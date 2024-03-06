@@ -64,6 +64,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.d(TAG, "Group: ${thread.threadGroup}")
+
+
+        binding.button2.setOnClickListener {
+            val resultView = binding.countResultView
+            val inputDays = binding.editTextDays.text.toString().toDoubleOrNull() ?: 0.0
+            val inputPairs = binding.editTextPairs.text.toString().toDoubleOrNull() ?: 0.0
+
+            Thread {
+                val numberThread = ++counter
+
+                Log.d("ThreadProject",
+                    getString(R.string.thread_project, numberThread, GROUP_NUMBER, LIST_NUMBER))
+
+                if (inputPairs != 0.0 && inputDays!= 0.0) {
+                    val result = "%.1f".format(inputPairs / inputDays)
+                    runOnUiThread {
+                        resultView.text = getString(R.string.count_result, result)
+                    }
+                } else {
+                    runOnUiThread {
+                        resultView.text = getString(R.string.count_result_error)
+                    }
+                }
+
+                Log.d("ThreadProject", getThreadNameLine("", "$numberThread"))
+            }.start()
+        }
     }
 
     private fun getThreadNameLine(threadStatus: String, threadName: String): String =

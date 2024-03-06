@@ -1,6 +1,8 @@
 <resources>
   <string name="app_name">thread</string>
-  <string name="thread_name">Имя %1$s потока: %2$s</string>
-  <string name="new_thread_name_text">МОЙ НОМЕР ГРУППЫ: %1$s, НОМЕР ПО СПИСКУ: %2$d, МОЙ ЛЮБИМЫЙ ФИЛЬМ: %3$s</string>
+  <string name="thread_name">\nИмя %1$s потока: %2$s</string>
+  <string name="new_thread_name_text">МОЙ НОМЕР ГРУППЫ: %1$s,\nНОМЕР ПО СПИСКУ: %2$d,\nМОЙ ЛЮБИМЫЙ ФИЛЬМ: %3$s</string>
   <string name="thread_project">Запущен поток № %1$d студентом группы № %2$s номер по списку № %3$d</string>
+  <string name="count_result">Среднее количество пар в день: %s</string>
+  <string name="count_result_error">Ошибка входных данных</string>
 </resources>
