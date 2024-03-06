@@ -5,6 +5,9 @@
       <entry key="app">
         <State />
       </entry>
+      <entry key="data_thread">
+        <State />
+      </entry>
       <entry key="thread">
         <State />
       </entry>
