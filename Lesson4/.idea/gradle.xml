@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/looper" />
             <option value="$PROJECT_DIR$/serviceapp" />
             <option value="$PROJECT_DIR$/thread" />
+            <option value="$PROJECT_DIR$/workmanager" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

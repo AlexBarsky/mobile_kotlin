@@ -20,6 +20,9 @@
       <entry key="thread">
         <State />
       </entry>
+      <entry key="workmanager">
+        <State />
+      </entry>
     </value>
   </component>
 </project>
