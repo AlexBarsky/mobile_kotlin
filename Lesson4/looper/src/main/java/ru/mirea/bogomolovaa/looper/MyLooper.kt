@@ -18,6 +18,12 @@ class MyLooper(
         Log.d(TAG, "run")
         Looper.prepare()
 
+//        fromExampleCode()
+        fromTaskCode()
+        Looper.loop()
+    }
+
+    private fun fromTaskCode() {
         mHandler = object : Handler(Looper.myLooper()!!) {
             override fun handleMessage(msg: Message) {
                 val startTime = msg.data.getLong("START_TIME")
@@ -37,10 +43,9 @@ class MyLooper(
                 mainHandler.sendMessage(message)
             }
         }
-        Looper.loop()
     }
 
-    fun fromExampleCode() {
+    private fun fromExampleCode() {
         mHandler = object : Handler(Looper.myLooper()!!) {
             override fun handleMessage(msg: Message) {
                 val data = msg.data.getString("KEY")!!

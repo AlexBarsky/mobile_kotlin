@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+//        fromExampleCode()
+        fromTaskCode()
+    }
+
+    private fun fromTaskCode() {
         val mainThreadHandler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 Log.d(TAG, "Task executed. ${msg.data.getString("result")}")
@@ -57,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun fromExampleCode() {
+    private fun fromExampleCode() {
         val mainThreadHandler = object : Handler(Looper.getMainLooper()) {
             override fun handleMessage(msg: Message) {
                 Log.d(TAG, "Task executed. This is result: ${msg.data.getString("result")}")
