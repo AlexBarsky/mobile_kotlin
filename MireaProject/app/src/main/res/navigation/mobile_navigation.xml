@@ -32,4 +32,9 @@
       android:name="ru.mirea.bogomolovaa.mireaproject.ui.web.WebViewFragment"
       android:label="@string/menu_web_view"
       tools:layout="@layout/fragment_web_view" />
+  <fragment
+      android:id="@+id/nav_background_task"
+      android:name="ru.mirea.bogomolovaa.mireaproject.ui.backgroundtask.BackgroundTaskFragment"
+      android:label="@string/menu_background_task"
+      tools:layout="@layout/fragment_background_task" />
 </navigation>
