@@ -1,21 +1,25 @@
-package ru.mirea.bogomolovaa.lesson5
+package ru.mirea.bogomolovaa.accelerometer
 
-import android.content.Context.SENSOR_SERVICE
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.widget.SimpleAdapter
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import ru.mirea.bogomolovaa.lesson5.databinding.ActivityMainBinding
+import ru.mirea.bogomolovaa.accelerometer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sensorManager: SensorManager
+    private lateinit var accelerometerSensor: Sensor
+    private lateinit var azimuthTextView: TextView
+    private lateinit var pitchTextView: TextView
+    private lateinit var rollTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,34 +34,23 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             insets
         }
 
-        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        val sensors = sensorManager.getSensorList(Sensor.TYPE_ALL)
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)!!
 
-        //Для получения информации о сенсорах конкретного типа
-        val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        azimuthTextView = binding.textViewAzimuth
+        pitchTextView = binding.textViewPitch
+        rollTextView = binding.textViewRoll
+    }
 
-        val listSensor = binding.listView
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
 
-        val arrayList = ArrayList<HashMap<String, Any>>()
-
-        for (i in 0 until sensors.size) {
-            val sensorTypeList = HashMap<String, Any>()
-            sensorTypeList["Name"] = sensors[i].name
-            sensorTypeList["Value"] = sensors[i].maximumRange
-            arrayList.add(sensorTypeList)
-        }
-
-        val mHistory = SimpleAdapter(
-            this,
-            arrayList,
-            android.R.layout.simple_list_item_2,
-            arrayOf("Name","Value"),
-            intArrayOf(android.R.id.text1, android.R.id.text2)
-        )
-
-        listSensor.adapter = mHistory
-
-        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL)
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(this, accelerometerSensor,
+            SensorManager.SENSOR_DELAY_NORMAL)
     }
 
     override fun onSensorChanged(event: SensorEvent) {
@@ -65,6 +58,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             val valueAzimuth = event.values[0]
             val valuePitch = event.values[1]
             val valueRoll = event.values[2]
+
+            azimuthTextView.text = getString(R.string.azimuth, valueAzimuth)
+            pitchTextView.text = getString(R.string.pitch, valuePitch)
+            rollTextView.text = getString(R.string.roll, valueRoll)
         }
     }
 
