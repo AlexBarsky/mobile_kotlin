@@ -130,7 +130,13 @@ class AudioRecordFragment : Fragment() {
                     recordButton.text = getString(R.string.stop_recording)
                     playButton.isEnabled = false
                     seekBar.isVisible = false
-                    startRecording()
+                    when (_player) {
+                        null -> startRecording()
+                        else -> {
+                            stopPlaying()
+                            startRecording()
+                        }
+                    }
                 }
                 false -> {
                     recordButton.text = getString(R.string.start_recording)
@@ -153,10 +159,12 @@ class AudioRecordFragment : Fragment() {
                         0
                     )
                     recordButton.isEnabled = false
-
                     when (_player) {
                         null -> startPlaying()
-                        else -> resumePlaying()
+                        else -> {
+                            if (currentPlaybackPosition == 0) restartPlaying()
+                            else resumePlaying()
+                        }
                     }
                 }
                 false -> {
@@ -181,13 +189,9 @@ class AudioRecordFragment : Fragment() {
                 }
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // Do nothing
-            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // Do nothing
-            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
         return binding.root
     }
@@ -228,13 +232,20 @@ class AudioRecordFragment : Fragment() {
             player.setOnCompletionListener {
                 playButton.text = getString(R.string.start_playing)
                 recordButton.isEnabled = true
-                stopPlaying()
+                player.stop()
+                currentPlaybackPosition = 0
+                isStartPlaying =! isStartPlaying
             }
             seekBar.max = player.duration
             currentPlaybackPosition = 0
         } catch (e: IOException) {
             Log.e(TAG, "player prepare() failed")
         }
+    }
+
+    private fun restartPlaying() {
+        stopPlaying()
+        startPlaying()
     }
 
     private fun resumePlaying() {
