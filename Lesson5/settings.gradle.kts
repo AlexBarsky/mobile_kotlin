@@ -23,3 +23,4 @@ rootProject.name = "Lesson5"
 include(":app")
 include(":accelerometer")
 include(":camera")
+include(":audiorecord")
