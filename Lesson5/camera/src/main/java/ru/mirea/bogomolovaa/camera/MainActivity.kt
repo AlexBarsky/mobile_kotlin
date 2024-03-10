@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.imageView.setOnClickListener {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            Log.d(TAG, isWork.toString())
+
             if (isWork) {
                 try {
                     val photoFile = createImageFile()
@@ -104,8 +104,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private companion object {
-        const val TAG = "MainActivity"
         const val REQUEST_CODE_PERMISSION = 100
-        const val CAMERA_REQUEST = 0
     }
 }
