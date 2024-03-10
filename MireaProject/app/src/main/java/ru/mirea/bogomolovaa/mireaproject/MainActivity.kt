@@ -1,13 +1,8 @@
 package ru.mirea.bogomolovaa.mireaproject
 
-import android.Manifest.permission.CAMERA
-import android.Manifest.permission.RECORD_AUDIO
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView

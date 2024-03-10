@@ -23,7 +23,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
