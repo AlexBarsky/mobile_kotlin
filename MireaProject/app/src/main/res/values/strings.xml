@@ -19,4 +19,13 @@
 
   <string name="background_task_description">В данном фрагменте вычисляется число π\nс использованием метода численного интегрирования (метод Монте-Карло).\nВводить менее 100000 </string>
   <string name="worker_finished">Worker has ended with result: %f</string>
+  <string name="menu_audio_record">Audio record</string>
+  <string name="menu_camera">Camera</string>
+  <string name="menu_temperature">Temperature</string>
+
+  <string name="permission_denied">Permission denied, thus the app is currently doesn`t work</string>
+  <string name="stop_recording">Остановить запись</string>
+  <string name="start_recording">Начать запись. №3, БСБО-11-21</string>
+  <string name="stop_playing">Прекратить проигрывание</string>
+  <string name="start_playing">Воспроизвести</string>
 </resources>

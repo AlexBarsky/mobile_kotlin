@@ -1,8 +1,13 @@
 package ru.mirea.bogomolovaa.mireaproject
 
+import android.Manifest.permission.CAMERA
+import android.Manifest.permission.RECORD_AUDIO
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -13,7 +18,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import ru.mirea.bogomolovaa.mireaproject.databinding.ActivityMainBinding
 import ru.mirea.bogomolovaa.mireaproject.ui.backgroundtask.BackgroundTaskViewModel
 
@@ -63,5 +67,9 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    companion object {
+        private val TAG: String = MainActivity::class.java.simpleName
     }
 }
