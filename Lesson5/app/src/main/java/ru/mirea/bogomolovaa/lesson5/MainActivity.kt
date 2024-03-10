@@ -1,6 +1,5 @@
 package ru.mirea.bogomolovaa.lesson5
 
-import android.content.Context.SENSOR_SERVICE
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
