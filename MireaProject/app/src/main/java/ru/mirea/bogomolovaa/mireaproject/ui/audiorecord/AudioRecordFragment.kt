@@ -17,10 +17,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.SeekBar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getDrawable
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import ru.mirea.bogomolovaa.mireaproject.R
@@ -47,9 +51,14 @@ class AudioRecordFragment : Fragment() {
     private var _player: MediaPlayer? = null
     private val player: MediaPlayer get() = _player!!
 
+    private lateinit var recordButton: Button
+    private lateinit var playButton: Button
+    private lateinit var seekBar: SeekBar
+
     private lateinit var recordFilePath: String
     private var isStartRecording = true
     private var isStartPlaying = true
+    private var currentPlaybackPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,9 +73,18 @@ class AudioRecordFragment : Fragment() {
     ): View {
         _binding = FragmentAudioRecordBinding.inflate(inflater, container, false)
 
-        val recordButton = binding.recordButton
-        val playButton = binding.playButton
+        recordButton = binding.recordButton
+        playButton = binding.playButton
+        seekBar = binding.seekBar
         playButton.isEnabled = false
+        seekBar.isVisible = false
+
+        playButton.setCompoundDrawablesWithIntrinsicBounds(
+            R.drawable.ic_button_pause,
+            0,
+            0,
+            0
+        )
 
         recordFilePath = File(
             requireContext().getExternalFilesDir(Environment.DIRECTORY_MUSIC),
@@ -112,11 +130,13 @@ class AudioRecordFragment : Fragment() {
                 true -> {
                     recordButton.text = getString(R.string.stop_recording)
                     playButton.isEnabled = false
+                    seekBar.isVisible = false
                     startRecording()
                 }
                 false -> {
                     recordButton.text = getString(R.string.start_recording)
                     playButton.isEnabled = true
+                    seekBar.isVisible = true
                     stopRecording()
                 }
             }
@@ -126,19 +146,50 @@ class AudioRecordFragment : Fragment() {
         playButton.setOnClickListener {
             when (isStartPlaying) {
                 true -> {
-                    playButton.text = getString(R.string.stop_playing)
+                    playButton.text = getString(R.string.pause_playing)
+                    playButton.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_button_pause,
+                        0,
+                        0,
+                        0
+                    )
                     recordButton.isEnabled = false
-                    startPlaying()
+
+                    when (_player) {
+                        null -> startPlaying()
+                        else -> resumePlaying()
+                    }
                 }
                 false -> {
-                    playButton.text = getString(R.string.start_playing)
-                    recordButton.isEnabled = true
-                    stopPlaying()
+                    playButton.text = getString(R.string.resume_playing)
+                    playButton.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.ic_button_play,
+                        0,
+                        0,
+                        0
+                    )
+                    pausePlaying()
                 }
             }
             isStartPlaying =! isStartPlaying
         }
 
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    player.seekTo(progress)
+                    currentPlaybackPosition = progress
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // Do nothing
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // Do nothing
+            }
+        })
         return binding.root
     }
 
@@ -175,14 +226,39 @@ class AudioRecordFragment : Fragment() {
             player.setDataSource(recordFilePath)
             player.prepare()
             player.start()
+            player.setOnCompletionListener {
+                playButton.text = getString(R.string.start_playing)
+                recordButton.isEnabled = true
+                stopPlaying()
+            }
+            seekBar.max = player.duration
+            currentPlaybackPosition = 0
         } catch (e: IOException) {
             Log.e(TAG, "player prepare() failed")
         }
     }
 
+    private fun resumePlaying() {
+        player.seekTo(currentPlaybackPosition)
+        player.start()
+    }
+
+    private fun pausePlaying() {
+        player.pause()
+        currentPlaybackPosition = player.currentPosition
+    }
+
     private fun stopPlaying() {
         player.stop()
         player.release()
+        currentPlaybackPosition = 0
         _player = null
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _recorder = null
+        _player = null
+        _binding = null
     }
 }

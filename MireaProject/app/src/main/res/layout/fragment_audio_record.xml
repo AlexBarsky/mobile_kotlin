@@ -23,14 +23,18 @@
         app:icon="@drawable/ic_menu_audio_record" />
 
     <SeekBar
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/seekBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="invisible"/>
+        android:max="100"
+        android:progress="0"
+        android:secondaryProgress="0"
+        android:thumb="@drawable/seek_bar_thumb"
+        android:progressDrawable="@drawable/seek_bar_progress"/>
 
     <Button
         android:text="Воспроизвести"
@@ -41,20 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="264dp"
-        app:icon="@drawable/ic_button_play" />
-
-    <Button
-        android:text="Приостановить"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pauseButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="104dp"
-        android:layout_marginBottom="180dp"
-        app:layout_constraintTop_toBottomOf="@+id/playButton"
-        app:icon="@drawable/ic_button_pause"
-        app:layout_constraintVertical_bias="0.857" />
+        app:icon="@drawable/ic_play_pause_button" />
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
