@@ -29,4 +29,5 @@
   <string name="pause_playing">Прервать проигрывание</string>
   <string name="start_playing">Воспроизвести</string>
   <string name="resume_playing">Продолжить воспроизведение</string>
+  <string name="temperature_format">"Temperature: %d°C"</string>
 </resources>
