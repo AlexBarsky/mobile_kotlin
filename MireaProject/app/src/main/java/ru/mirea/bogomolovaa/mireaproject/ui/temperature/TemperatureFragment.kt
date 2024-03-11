@@ -7,20 +7,29 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import ru.mirea.bogomolovaa.mireaproject.R
 import ru.mirea.bogomolovaa.mireaproject.databinding.FragmentTemperatureBinding
+import kotlin.math.max
+import kotlin.math.min
 
 class TemperatureFragment : Fragment(), SensorEventListener {
 
     companion object {
         fun newInstance() = TemperatureFragment()
         val TAG: String = TemperatureFragment::class.java.simpleName
+
+        private const val MIN_TEMPERATURE = -273.1f
+        private const val MAX_TEMPERATURE = 100.0f
+
+        private const val MIN_HEIGHT = 0
+        private const val MAX_HEIGHT = 1050
     }
 
     private val viewModel: TemperatureViewModel by viewModels()
@@ -28,9 +37,12 @@ class TemperatureFragment : Fragment(), SensorEventListener {
     private var _binding: FragmentTemperatureBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var sensorManager: SensorManager
     private var temperatureSensor: Sensor? = null
-    private lateinit var thermometerImageView: ImageView
+
+    private lateinit var sensorManager: SensorManager
+    private lateinit var temperatureTextView: TextView
+    private lateinit var thermometerFillHotView: View
+    private lateinit var thermometerFillColdView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +56,9 @@ class TemperatureFragment : Fragment(), SensorEventListener {
     ): View {
         _binding = FragmentTemperatureBinding.inflate(inflater, container, false)
 
-        thermometerImageView = binding.thermometerImageView
+        temperatureTextView = binding.temperatureTextView
+        thermometerFillHotView = binding.thermometerFillHot
+        thermometerFillColdView = binding.thermometerFillCold
 
         sensorManager = requireContext().getSystemService(SENSOR_SERVICE) as SensorManager
         temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
@@ -53,7 +67,7 @@ class TemperatureFragment : Fragment(), SensorEventListener {
             Toast.makeText(
                 requireContext(),
                 "Temperature sensor not available",
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_LONG
             ).show()
         }
         return binding.root
@@ -69,23 +83,35 @@ class TemperatureFragment : Fragment(), SensorEventListener {
 
     override fun onPause() {
         super.onPause()
+
         sensorManager.unregisterListener(this)
     }
 
-    private fun updateUI(temperature: Float) {
-        val drawableId = when {
-            temperature < 10 -> R.drawable.ic_thermometer_cold
-            temperature in 10.0..30.0 -> R.drawable.ic_thermometer_medium
-            else -> R.drawable.ic_thermometer_hot
-        }
-        thermometerImageView.setImageResource(drawableId)
+    private fun calculateFillHeight(temperature: Float): Int {
+        val percentage = (temperature - MIN_TEMPERATURE) / (MAX_TEMPERATURE - MIN_TEMPERATURE)
+        val fillHeight = (percentage * MAX_HEIGHT).toInt()
+
+        return min(MAX_HEIGHT, max(MIN_HEIGHT, fillHeight))
+    }
+
+    private fun calculateFillColors(temperature: Float) {
+        val percentage = (temperature - MIN_TEMPERATURE) / (MAX_TEMPERATURE - MIN_TEMPERATURE)
+        val height = (percentage * MAX_HEIGHT).toInt()
+        val fillHeight = min(MAX_HEIGHT, max(MIN_HEIGHT, height))
+
+        thermometerFillHotView.layoutParams.height = fillHeight
+        thermometerFillColdView.layoutParams.height = MAX_HEIGHT - fillHeight
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
         event?.let {
             if (it.sensor.type == Sensor.TYPE_AMBIENT_TEMPERATURE) {
                 val temperature = it.values[0]
-                updateUI(temperature)
+                temperatureTextView.text = getString(R.string.temperature_format, temperature.toInt())
+
+                calculateFillColors(temperature)
+                thermometerFillHotView.requestLayout()
+                thermometerFillColdView.requestLayout()
             }
         }
     }
