@@ -97,7 +97,6 @@ class CameraFragment : Fragment() {
         ) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
                 binding.avatar.setImageURI(imageUri)
-
             }
         }
 
@@ -120,6 +119,15 @@ class CameraFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        requestPermissionsLauncher.launch(arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ))
+    }
+
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
@@ -130,14 +138,5 @@ class CameraFragment : Fragment() {
             ".jpg", /* postfix */
             requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES) /* directory */
         )
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        requestPermissionsLauncher.launch(arrayOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ))
     }
 }

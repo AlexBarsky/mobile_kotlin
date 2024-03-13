@@ -52,4 +52,8 @@
       android:name="ru.mirea.bogomolovaa.mireaproject.ui.temperature.TemperatureFragment"
       android:label="@string/menu_temperature"
       tools:layout="@layout/fragment_temperature" />
+  <fragment
+      android:id="@+id/nav_profile"
+      android:name="ru.mirea.bogomolovaa.mireaproject.ui.profile.ProfileFragment"
+      android:label="@string/menu_profile" />
 </navigation>
