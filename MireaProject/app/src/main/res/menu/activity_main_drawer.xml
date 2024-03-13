@@ -40,5 +40,9 @@
         android:id="@+id/nav_temperature"
         android:icon="@drawable/ic_menu_temperature"
         android:title="@string/menu_temperature" />
+    <item
+      android:id="@+id/nav_draft_list"
+      android:icon="@drawable/ic_menu_draft_list"
+      android:title="@string/menu_draft_list" />
   </group>
 </menu>

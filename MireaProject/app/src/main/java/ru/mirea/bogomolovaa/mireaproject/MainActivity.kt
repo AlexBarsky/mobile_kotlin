@@ -1,7 +1,6 @@
 package ru.mirea.bogomolovaa.mireaproject
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -18,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import ru.mirea.bogomolovaa.mireaproject.databinding.ActivityMainBinding
 import ru.mirea.bogomolovaa.mireaproject.ui.backgroundtask.BackgroundTaskViewModel
+import ru.mirea.bogomolovaa.mireaproject.ui.mail.MailDraftFragment
+import ru.mirea.bogomolovaa.mireaproject.ui.mail.MailViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     private val backgroundTaskViewModel: BackgroundTaskViewModel by viewModels()
+    private val mailViewModel: MailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        binding.appBarMain.fab.setOnClickListener {
+            val fragment = MailDraftFragment()
+            fragment.show(supportFragmentManager, "MyDialogFragment")
         }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -49,14 +51,34 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
                 R.id.nav_data, R.id.nav_web_view, R.id.nav_background_task,
                 R.id.nav_audio_record, R.id.nav_camera, R.id.nav_temperature,
-//                R.id.nav_profile
+                R.id.nav_draft_list,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         backgroundTaskViewModel.resultTextView.observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            Snackbar.make(
+                binding.root,
+                it,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+
+        mailViewModel.onFileSaved.observe(this) {
+            if (it) {
+                Snackbar.make(
+                    binding.root,
+                    R.string.draft_saved,
+                    Snackbar.LENGTH_LONG
+                ).show()
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    R.string.draft_not_saved,
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
         }
     }
 

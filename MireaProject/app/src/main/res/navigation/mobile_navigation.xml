@@ -56,4 +56,14 @@
       android:id="@+id/nav_profile"
       android:name="ru.mirea.bogomolovaa.mireaproject.ui.profile.ProfileFragment"
       android:label="@string/menu_profile" />
+  <fragment
+      android:id="@+id/nav_mail"
+      android:name="ru.mirea.bogomolovaa.mireaproject.ui.mail.MailDraftFragment"
+      android:label="@string/menu_mail"
+      tools:layout="@layout/fragment_mail" />
+  <fragment
+      android:id="@+id/nav_draft_list"
+      android:name="ru.mirea.bogomolovaa.mireaproject.ui.mail.DraftFragment"
+      android:label="@string/menu_draft_list"
+      tools:layout="@layout/fragment_draft_list" />
 </navigation>
