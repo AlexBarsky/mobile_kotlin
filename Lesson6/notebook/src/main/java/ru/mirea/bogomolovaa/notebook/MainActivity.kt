@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
 
                     Thread {
                         readFileFromExternalStorage(fileName)?.let {
-                            Log.d(TAG, it.toString())
                             editTextQuote.post {
                                 editTextQuote.setText(it.joinToString("\n"))
                             }

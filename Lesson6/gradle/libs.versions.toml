@@ -10,6 +10,10 @@ material = "1.11.0"
 activity = "1.8.2"
 constraintlayout = "2.1.4"
 securityCrypto = "1.0.0"
+roomCompiler = "2.6.1"
+roomRuntime="2.6.1"
+ksp="1.9.21-1.0.15"
+symbolProcessingApi = "1.9.21-1.0.15"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -21,8 +25,12 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto"}
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime"}
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler"}
+symbol-processing-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "symbolProcessingApi" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+devtoolsKsp = {id = "com.google.devtools.ksp", version.ref = "ksp" }
 
