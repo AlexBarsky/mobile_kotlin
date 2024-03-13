@@ -65,12 +65,12 @@ class DraftRecyclerViewAdapter(
             inputStream.close()
             return stringBuilder.toString()
         } catch (e: IOException) {
-            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         } finally {
             try {
                 inputStream?.close()
             } catch (e: IOException) {
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
             }
         }
         return null
