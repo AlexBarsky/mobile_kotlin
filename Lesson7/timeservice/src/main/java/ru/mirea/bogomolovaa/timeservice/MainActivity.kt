@@ -44,27 +44,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.button.setOnClickListener {
-            getTimeFromServer()
+            lifecycleScope.launch(Dispatchers.IO) {
+                getTimeFromServer()
+            }
 
         }
     }
 
-    private fun getTimeFromServer() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val socket = Socket(HOST, PORT)
-                val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
-                reader.readLine()
-                val timeResult = reader.readLine()
-                Log.d(TAG, timeResult)
 
-                withContext(Dispatchers.Main) {
-                    binding.textView.text = parseTimeResult(timeResult)
-                }
-                socket.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
+    private suspend fun getTimeFromServer() {
+        try {
+            val socket = Socket(HOST, PORT)
+            val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
+            reader.readLine()
+            val timeResult = reader.readLine()
+            socket.close()
+
+            Log.d(TAG, timeResult)
+            withContext(Dispatchers.Main) {
+                binding.textView.text = parseTimeResult(timeResult)
             }
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 
