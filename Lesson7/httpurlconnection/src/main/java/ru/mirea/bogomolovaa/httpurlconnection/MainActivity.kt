@@ -89,56 +89,56 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun downloadPage(): JSONObject? =
-        withContext(Dispatchers.IO) {
-            var result: JSONObject? = null
-            var link: URL? = null
-            try {
-                link = URL(URL_JSON)
-                val resultJson = downloadInfo(link)
-                Log.d(TAG, resultJson)
-
-                val responseJson = JSONObject(resultJson)
-                Log.d(TAG, "Response: $responseJson")
-
-                link = URL("$URL_WEATHER?q=${responseJson.getString("city")},DE&appid=$API_KEY")
-                val weatherJson = downloadInfo(link)
-                if (!weatherJson.contains("Error Code:")) {
-                    Log.d(TAG, weatherJson)
-                }
-                result = responseJson
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            result
-        }
-
-    private fun downloadInfo(url: URL): String {
-        var inputStream: InputStream? = null
-        var data = ""
+    private suspend fun downloadPage(): JSONObject? {
+        var result: JSONObject? = null
+        var link: URL? = null
         try {
-            val connection = url.openConnection() as HttpURLConnection
+            link = URL(URL_JSON)
+            val resultJson = downloadInfo(link)
+            Log.d(TAG, resultJson)
 
-            connection.readTimeout = 100000
-            connection.connectTimeout = 100000
-            connection.requestMethod = "GET"
-            connection.instanceFollowRedirects = true
-            connection.useCaches = false
-            connection.doInput = true
+            val responseJson = JSONObject(resultJson)
+            Log.d(TAG, "Response: $responseJson")
 
-            val responseCode = connection.responseCode
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                inputStream = connection.inputStream
-                data = inputStream.bufferedReader().use(BufferedReader::readText)
-            } else {
-                data = "${connection.responseMessage}. Error Code: $responseCode"
+            link = URL("$URL_WEATHER?q=${responseJson.getString("city")},DE&appid=$API_KEY")
+            val weatherJson = downloadInfo(link)
+            if (!weatherJson.contains("Error Code:")) {
+                Log.d(TAG, weatherJson)
             }
-            connection.disconnect()
-        } catch (e: IOException) {
+            result = responseJson
+        } catch (e: Exception) {
             e.printStackTrace()
-        } finally {
-            inputStream?.close()
         }
-        return data
+        return result
     }
+
+    private suspend fun downloadInfo(url: URL): String =
+        withContext(Dispatchers.IO) {
+            var inputStream: InputStream? = null
+            var data = ""
+            try {
+                val connection = url.openConnection() as HttpURLConnection
+
+                connection.readTimeout = 100000
+                connection.connectTimeout = 100000
+                connection.requestMethod = "GET"
+                connection.instanceFollowRedirects = true
+                connection.useCaches = false
+                connection.doInput = true
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = connection.inputStream
+                    data = inputStream.bufferedReader().use(BufferedReader::readText)
+                } else {
+                    data = "${connection.responseMessage}. Error Code: $responseCode"
+                }
+                connection.disconnect()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } finally {
+                inputStream?.close()
+            }
+            data
+        }
 }
