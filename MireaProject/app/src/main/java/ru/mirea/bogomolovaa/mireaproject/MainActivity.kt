@@ -1,10 +1,13 @@
 package ru.mirea.bogomolovaa.mireaproject
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -17,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import ru.mirea.bogomolovaa.mireaproject.databinding.ActivityMainBinding
 import ru.mirea.bogomolovaa.mireaproject.ui.backgroundtask.BackgroundTaskViewModel
+import ru.mirea.bogomolovaa.mireaproject.ui.home.HomeViewModel
 import ru.mirea.bogomolovaa.mireaproject.ui.mail.MailDraftFragment
 import ru.mirea.bogomolovaa.mireaproject.ui.mail.MailViewModel
 
@@ -28,7 +32,9 @@ class MainActivity : AppCompatActivity() {
 
     private val backgroundTaskViewModel: BackgroundTaskViewModel by viewModels()
     private val mailViewModel: MailViewModel by viewModels()
+//    private val homeViewModel: HomeViewModel by viewModels()
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -51,11 +57,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
                 R.id.nav_data, R.id.nav_web_view, R.id.nav_background_task,
                 R.id.nav_audio_record, R.id.nav_camera, R.id.nav_temperature,
-                R.id.nav_draft_list,
+                R.id.nav_draft_list, R.id.nav_heroes
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+//        setupMainAfterIntent(intent.extras)
 
         backgroundTaskViewModel.resultTextView.observe(this) {
             Snackbar.make(
@@ -82,6 +89,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun goBackToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.putExtra(LoginActivity.EXTRA_SIGN_OUT, true)
+        startActivity(intent)
+        finish()
+    }
+
+//    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+//    private fun setupMainAfterIntent(extras: Bundle?) {
+//        if (extras!= null) {
+//            try {
+//                val user = extras.getParcelable(
+//                    LoginActivity.EXTRA_USER_KEY,
+//                    FirebaseUser::class.java
+//                )
+//                if (user != null) {
+//                    currentUser = user
+//                    Toast.makeText(this, currentUser.email, Toast.LENGTH_LONG).show()
+//                    return
+//                }
+//                Log.d(TAG, "Failed to get user")
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//        goBackToLogin()
+//    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
@@ -93,6 +128,10 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> {
                 navController.navigate(R.id.nav_profile)
                 Toast.makeText(this, "Settings clicked", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.action_sign_out -> {
+                goBackToLogin()
                 true
             }
             else -> super.onOptionsItemSelected(item)

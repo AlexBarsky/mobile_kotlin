@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="ru.mirea.bogomolovaa.mireaproject" />
-                  <option name="mobileSdkAppId" value="1:1043192458656:android:d5207dc025153c868808c5" />
-                  <option name="projectId" value="mireaproject-f8790" />
-                  <option name="projectNumber" value="1043192458656" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
