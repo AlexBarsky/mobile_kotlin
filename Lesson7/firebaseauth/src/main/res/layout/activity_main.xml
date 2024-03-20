@@ -67,7 +67,8 @@
         android:layout_height="match_parent"
         android:id="@+id/signedInSection"
         android:weightSum="2"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:visibility="visible">
 
       <Button
           android:text="@string/sign_out"
