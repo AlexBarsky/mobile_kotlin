@@ -3,11 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.RECORD_AUDIO" />
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission
       android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
       tools:ignore="ScopedStorage" />
+
+  <!-- определение местонахождения устройства -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
   <uses-feature
       android:name="android.hardware.camera"
@@ -36,11 +42,6 @@
         android:name=".MainActivity"
         android:exported="true"
         android:theme="@style/Theme.MireaProject.NoActionBar">
-<!--      <intent-filter>-->
-<!--        <action android:name="android.intent.action.MAIN" />-->
-
-<!--        <category android:name="android.intent.category.LAUNCHER" />-->
-<!--      </intent-filter>-->
     </activity>
 
     <provider

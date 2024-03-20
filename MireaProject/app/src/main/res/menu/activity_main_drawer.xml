@@ -48,5 +48,9 @@
       android:id="@+id/nav_heroes"
       android:icon="@drawable/ic_menu_hero_list"
       android:title="@string/menu_heroes" />
+    <item
+        android:id="@+id/nav_institutions"
+        android:icon="@drawable/ic_menu_institutions"
+        android:title="@string/menu_institutions" />
   </group>
 </menu>

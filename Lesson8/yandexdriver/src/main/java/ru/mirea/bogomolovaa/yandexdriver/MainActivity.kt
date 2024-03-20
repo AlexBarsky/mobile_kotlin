@@ -41,6 +41,7 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.CompositeIcon
 import com.yandex.mapkit.map.IconStyle
 import com.yandex.mapkit.map.MapObjectCollection
+import com.yandex.mapkit.map.PlacemarkMapObject
 import com.yandex.mapkit.map.RotationType
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.user_location.UserLocationLayer
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity(),
     private lateinit var mapObjects: MapObjectCollection
     private lateinit var drivingRouter: DrivingRouter
     private lateinit var drivingSession: DrivingSession
+    private lateinit var marker: PlacemarkMapObject
 
     private lateinit var routeStartLocation: Point
     private lateinit var routeEndLocation: Point
@@ -131,6 +133,18 @@ class MainActivity : AppCompatActivity(),
             .getInstance()
             .createDrivingRouter(DrivingRouterType.ONLINE)
         mapObjects = mapView.mapWindow.map.mapObjects.addCollection()
+
+        marker = mapView.mapWindow.map.mapObjects.addPlacemark().apply {
+            setIcon(ImageProvider.fromResource(baseContext, R.drawable.marker_icon))
+        }
+
+        marker.addTapListener { _, _ ->
+            Toast.makeText(
+                application, "Marker click",
+                Toast.LENGTH_SHORT
+            ).show()
+            false
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -163,7 +177,8 @@ class MainActivity : AppCompatActivity(),
                     0F
                 )
             )
-            createMarker()
+            marker.geometry = routeEndLocation
+//            createMarker()
             submitRequest()
         }
     }
@@ -208,7 +223,6 @@ class MainActivity : AppCompatActivity(),
         val marker = mapView.mapWindow.map.mapObjects.addPlacemark().apply {
             geometry = routeEndLocation
             setIcon(ImageProvider.fromResource(baseContext, R.drawable.marker_icon))
-            Log.d("TAG", routeEndLocation.toString())
         }
 
         marker.addTapListener { _, _ ->

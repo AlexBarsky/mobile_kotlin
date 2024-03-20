@@ -100,4 +100,5 @@ with Firebase.</string>
   <string name="loading">Loading</string>
   <string name="placeholder_success">Placeholder text</string>
   <string name="mars_photo">Mars photo</string>
+  <string name="menu_institutions">Institutions</string>
 </resources>

@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import ru.mirea.bogomolovaa.mireaproject.databinding.ActivityMainBinding
 import ru.mirea.bogomolovaa.mireaproject.ui.backgroundtask.BackgroundTaskViewModel
-import ru.mirea.bogomolovaa.mireaproject.ui.home.HomeViewModel
 import ru.mirea.bogomolovaa.mireaproject.ui.mail.MailDraftFragment
 import ru.mirea.bogomolovaa.mireaproject.ui.mail.MailViewModel
 
@@ -32,7 +31,6 @@ class MainActivity : AppCompatActivity() {
 
     private val backgroundTaskViewModel: BackgroundTaskViewModel by viewModels()
     private val mailViewModel: MailViewModel by viewModels()
-//    private val homeViewModel: HomeViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,12 +55,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
                 R.id.nav_data, R.id.nav_web_view, R.id.nav_background_task,
                 R.id.nav_audio_record, R.id.nav_camera, R.id.nav_temperature,
-                R.id.nav_draft_list, R.id.nav_heroes
+                R.id.nav_draft_list, R.id.nav_heroes, R.id.nav_institutions
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-//        setupMainAfterIntent(intent.extras)
 
         backgroundTaskViewModel.resultTextView.observe(this) {
             Snackbar.make(
@@ -95,27 +92,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
-//    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-//    private fun setupMainAfterIntent(extras: Bundle?) {
-//        if (extras!= null) {
-//            try {
-//                val user = extras.getParcelable(
-//                    LoginActivity.EXTRA_USER_KEY,
-//                    FirebaseUser::class.java
-//                )
-//                if (user != null) {
-//                    currentUser = user
-//                    Toast.makeText(this, currentUser.email, Toast.LENGTH_LONG).show()
-//                    return
-//                }
-//                Log.d(TAG, "Failed to get user")
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//        goBackToLogin()
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

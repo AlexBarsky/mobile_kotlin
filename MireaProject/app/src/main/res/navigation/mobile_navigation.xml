@@ -71,4 +71,9 @@
       android:name="ru.mirea.bogomolovaa.mireaproject.ui.heroes.HeroesFragment"
       android:label="@string/menu_heroes"
       tools:layout="@layout/fragment_heroes" />
+  <fragment
+      android:id="@+id/nav_institutions"
+      android:name="ru.mirea.bogomolovaa.mireaproject.ui.institutions.InstitutionsFragment"
+      android:label="@string/menu_institutions"
+      tools:layout="@layout/fragment_institutions" />
 </navigation>
