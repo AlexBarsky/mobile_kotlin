@@ -3,17 +3,26 @@ package ru.mirea.bogomolovaa.yandexmaps
 import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PointF
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.snackbar.Snackbar
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
@@ -36,6 +45,43 @@ class MainActivity : AppCompatActivity(), UserLocationObjectListener{
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private var locationPermissions = arrayOf(
+        ACCESS_COARSE_LOCATION,
+        ACCESS_FINE_LOCATION,
+        ACCESS_BACKGROUND_LOCATION
+    )
+
+    private var requestPermissionsLauncher: ActivityResultLauncher<Array<String>> =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            val granted = permissions.entries.all {
+                it.value
+            }
+            permissions.entries.forEach {
+                Log.e("LOG_TAG", "${it.key} = ${it.value}")
+            }
+
+            if (granted) {
+                mapView.onStart()
+                MapKitFactory.getInstance().onStart()
+                loadUserLocationLayer()
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    "Our app needs access to your device's location. " +
+                            "Please grant this permission in your device settings.",
+                    Snackbar.LENGTH_INDEFINITE
+                ).setAction("Go to settings") {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                }.show()
+            }
+        }
+
     private lateinit var userLocationLayer: UserLocationLayer
     private lateinit var mapView: MapView
 
@@ -50,29 +96,84 @@ class MainActivity : AppCompatActivity(), UserLocationObjectListener{
             insets
         }
 
-        val coarseLocation = ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION)
-        val fineLocation = ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION)
-        val backgroundLocation = ContextCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION)
-
-        if (coarseLocation == PackageManager.PERMISSION_GRANTED
-            && fineLocation == PackageManager.PERMISSION_GRANTED
-            && backgroundLocation == PackageManager.PERMISSION_GRANTED
-        ) {
-            loadUserLocationLayer()
-        } else {
-            requestPermissions(arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, ACCESS_BACKGROUND_LOCATION), 1)
-        }
-
         mapView = binding.mapview
-        mapView.mapWindow.map.move(
-            CameraPosition(
-                Point(55.751574, 37.573856), 11.0f, 0.0f,
-                0.0f
-            ),
-            Animation(Animation.Type.SMOOTH, 0F),
-            null
-        )
+//
+//        requestPermissionsLauncher = registerForActivityResult(
+//            ActivityResultContracts.RequestMultiplePermissions()
+//        ) { permissions ->
+//            if (permissions.keys.all {
+//                ContextCompat.checkSelfPermission(baseContext, it) != PackageManager.PERMISSION_GRANTED
+//            }) {
+//                Log.d("TAG", "Permissions not granted")
+//                Snackbar.make(
+//                    binding.root,
+//                    "Our app needs access to your device's location. " +
+//                            "Please grant this permission in your device settings.",
+//                    Snackbar.LENGTH_LONG
+//                ).setAction("Go to settings") {
+//                    try {
+//                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                        intent.data = Uri.fromParts(
+//                            "package",
+//                            baseContext.packageName,
+//                            null
+//                        )
+//                        startActivity(intent)
+//                    } catch (e: ActivityNotFoundException) {
+//                        Snackbar.make(
+//                            binding.root,
+//                            "Unable to open settings. " +
+//                                    "Please open your device settings and grant the permission manually.",
+//                            Snackbar.LENGTH_LONG
+//                        ).show()
+//                    }
+//                }.show()
+//            } else {
+//                Log.d("TAG", "Permissions granted")
+//                mapView.onStart()
+//                MapKitFactory.getInstance().onStart()
+//                loadUserLocationLayer()
+//            }
+//        }
     }
+
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//
+//        if (requestCode == 1000 && grantResults.isNotEmpty()) {
+//            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+//                // Permissions granted, start MapView and MapKit
+//                mapView.onStart()
+//                MapKitFactory.getInstance().onStart()
+//                loadUserLocationLayer()
+//            } else {
+//                Log.d("TAG", "Permissions not granted")
+//                Snackbar.make(
+//                    binding.root,
+//                    "Our app needs access to your device's location. " +
+//                            "Please grant this permission in your device settings.",
+//                    Snackbar.LENGTH_LONG
+//                ).setAction("Go to settings") {
+//                    try {
+//                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                        intent.data = Uri.fromParts(
+//                            "package",
+//                            baseContext.packageName,
+//                            null
+//                        )
+//                        startActivity(intent)
+//                    } catch (e: ActivityNotFoundException) {
+//                        Snackbar.make(
+//                            binding.root,
+//                            "Unable to open settings. " +
+//                                    "Please open your device settings and grant the permission manually.",
+//                            Snackbar.LENGTH_LONG
+//                        ).show()
+//                    }
+//                }.show()
+//            }
+//        }
+//    }
 
     private fun loadUserLocationLayer() {
         val mapKit = MapKitFactory.getInstance()
@@ -81,6 +182,7 @@ class MainActivity : AppCompatActivity(), UserLocationObjectListener{
         userLocationLayer.isVisible = true
         userLocationLayer.isHeadingEnabled = true
         userLocationLayer.setObjectListener(this)
+        Log.d("TAG", "UserLocationLayer loaded")
     }
 
     override fun onStop() {
@@ -90,18 +192,45 @@ class MainActivity : AppCompatActivity(), UserLocationObjectListener{
         MapKitFactory.getInstance().onStop()
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStart() {
         // Вызов onStart нужно передавать инстансам MapView и MapKit.
         super.onStart()
-        mapView.onStart()
-        MapKitFactory.getInstance().onStart()
+
+        if (checkPermission()) {
+            mapView.onStart()
+            MapKitFactory.getInstance().onStart()
+            loadUserLocationLayer()
+        } else {
+            requestPermissions()
+        }
+//        requestPermissionsLauncher.launch(locationPermissions)
+//        requestPermissions(locationPermissions, 1000)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun checkPermission(): Boolean =
+        ActivityCompat.checkSelfPermission(
+            this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(
+            this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(
+            this, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun requestPermissions() =
+        requestPermissionsLauncher.launch(locationPermissions)
+
+
     override fun onObjectAdded(userLocationView: UserLocationView) {
+        Log.d("TAG", "onObjectAdded")
         userLocationLayer.setAnchor(
             PointF((mapView.width * 0.5).toFloat(), (mapView.height * 0.5).toFloat()),
             PointF((mapView.width * 0.5).toFloat(), (mapView.height * 0.83).toFloat())
         )
+        Log.d("TAG", "setAnchor")
 
         // При определении направления движения устанавливается следующая иконка
         userLocationView.arrow.setIcon(
@@ -109,6 +238,7 @@ class MainActivity : AppCompatActivity(), UserLocationObjectListener{
                 this, R.drawable.arrow_up_float
             )
         )
+        Log.d("TAG", "setIcon")
 
         // При получении координат местоположения устанавливается следующая иконка
         val pinIcon: CompositeIcon = userLocationView.pin.useCompositeIcon()
@@ -120,15 +250,12 @@ class MainActivity : AppCompatActivity(), UserLocationObjectListener{
                 .setZIndex(1f)
                 .setScale(0.5f)
         )
+        Log.d("TAG", "setNextIcon")
 
         userLocationView.accuracyCircle.fillColor = Color.BLUE and -0x66000001
     }
 
-    override fun onObjectRemoved(p0: UserLocationView) {
-        TODO("Not yet implemented")
-    }
+    override fun onObjectRemoved(p0: UserLocationView) {}
 
-    override fun onObjectUpdated(p0: UserLocationView, p1: ObjectEvent) {
-        TODO("Not yet implemented")
-    }
+    override fun onObjectUpdated(p0: UserLocationView, p1: ObjectEvent) {}
 }
