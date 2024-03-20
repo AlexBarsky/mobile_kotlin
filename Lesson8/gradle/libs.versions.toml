@@ -10,6 +10,8 @@ material = "1.11.0"
 activity = "1.8.2"
 constraintlayout = "2.1.4"
 maps = "4.5.1-full"
+osmdroid = "6.1.16"
+preference = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -21,6 +23,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 yandex-maps = { group = "com.yandex.android", name = "maps.mobile", version.ref = "maps" }
+osmdroid = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroid"}
+androidx-preference = { group = "androidx.preference", name = "preference", version.ref="preference" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
