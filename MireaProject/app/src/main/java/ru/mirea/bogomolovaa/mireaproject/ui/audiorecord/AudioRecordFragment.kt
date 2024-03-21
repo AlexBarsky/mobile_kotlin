@@ -18,6 +18,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.mirea.bogomolovaa.mireaproject.R
 import ru.mirea.bogomolovaa.mireaproject.databinding.FragmentAudioRecordBinding
 import ru.mirea.bogomolovaa.mireaproject.utils.PermissionUtils
@@ -29,6 +33,12 @@ class AudioRecordFragment : Fragment() {
     companion object {
         fun newInstance() = AudioRecordFragment()
         val TAG: String = AudioRecordFragment::class.java.simpleName
+
+        val requiredPermissions = arrayOf(
+            RECORD_AUDIO,
+//            WRITE_EXTERNAL_STORAGE
+        )
+        private const val UPDATE_INTERVAL = 100L
     }
 
     private val viewModel: AudioRecordViewModel by activityViewModels()
@@ -52,6 +62,24 @@ class AudioRecordFragment : Fragment() {
     private var isStartPlaying = true
     private var currentPlaybackPosition = 0
 
+    private var shouldUpdateSeekBar = false
+    private var _updateJob: Job? = null
+
+    private val updateJob: Job
+        get() = synchronized(this) {
+            if (_updateJob == null) {
+                _updateJob = lifecycleScope.launch {
+                    while (shouldUpdateSeekBar) {
+                        seekBarProgressCallback.invoke()
+                        delay(UPDATE_INTERVAL)
+                    }
+                }
+            }
+            return _updateJob as Job
+        }
+
+    private var seekBarProgressCallback: () -> Unit = {}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -69,7 +97,6 @@ class AudioRecordFragment : Fragment() {
         playButton = binding.playButton
         seekBar = binding.seekBar
         playButton.isEnabled = false
-        seekBar.isVisible = false
 
         playButton.setCompoundDrawablesWithIntrinsicBounds(
             R.drawable.ic_button_pause,
@@ -97,10 +124,7 @@ class AudioRecordFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        requestPermissionsLauncher.launch(arrayOf(
-            RECORD_AUDIO,
-//            WRITE_EXTERNAL_STORAGE
-        ))
+        requestPermissionsLauncher.launch(requiredPermissions)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -208,10 +232,13 @@ class AudioRecordFragment : Fragment() {
                 recordButton.isEnabled = true
                 player.stop()
                 currentPlaybackPosition = 0
+                seekBar.progress = 0
                 isStartPlaying =! isStartPlaying
             }
             seekBar.max = player.duration
             currentPlaybackPosition = 0
+
+            startUpdatingSeekBar()
         } catch (e: IOException) {
             Log.e(TAG, "player prepare() failed")
         }
@@ -225,10 +252,12 @@ class AudioRecordFragment : Fragment() {
     private fun resumePlaying() {
         player.seekTo(currentPlaybackPosition)
         player.start()
+        startUpdatingSeekBar()
     }
 
     private fun pausePlaying() {
         player.pause()
+        stopUpdatingSeekBar()
         currentPlaybackPosition = player.currentPosition
     }
 
@@ -237,12 +266,34 @@ class AudioRecordFragment : Fragment() {
         player.release()
         currentPlaybackPosition = 0
         _player = null
+
+        stopUpdatingSeekBar()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stopUpdatingSeekBar()
         _recorder = null
         _player = null
         _binding = null
+    }
+
+    private fun startUpdatingSeekBar() {
+        Log.d(TAG, "startUpdatingSeekBar")
+        shouldUpdateSeekBar = true
+        updateJob
+        seekBarProgressCallback = {
+            if (player.isPlaying) {
+                Log.d(TAG, player.currentPosition.toString())
+                seekBar.progress = player.currentPosition
+                Log.d(TAG, seekBar.progress.toString())
+            }
+        }
+    }
+
+    private fun stopUpdatingSeekBar() {
+        shouldUpdateSeekBar = false
+        updateJob.cancel()
+        _updateJob = null
     }
 }

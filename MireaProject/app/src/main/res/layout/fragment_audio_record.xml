@@ -23,18 +23,27 @@
         app:icon="@drawable/ic_menu_audio_record" />
 
     <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:progressDrawable="@drawable/custom_seekbar_progress"
+        android:thumb="@drawable/custom_seekbar_thumb"
+        android:max="100"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:max="100"
+        android:layout_marginStart="16dp"
+        android:padding="4dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:progress="0"
+        android:splitTrack="false"
         android:secondaryProgress="0"
-        android:thumb="@drawable/seek_bar_thumb"
-        android:progressDrawable="@drawable/seek_bar_progress"/>
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/playButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintVertical_bias="0.391"
+        app:layout_constraintTop_toBottomOf="@+id/recordButton" />
 
     <Button
         android:text="Воспроизвести"
