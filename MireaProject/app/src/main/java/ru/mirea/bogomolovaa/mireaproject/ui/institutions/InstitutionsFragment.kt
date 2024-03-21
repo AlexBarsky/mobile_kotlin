@@ -39,7 +39,61 @@ class InstitutionsFragment : Fragment() {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION,
 //        Manifest.permission.MANAGE_EXTERNAL_STORAGE
         )
+
+        private val INSTITUTIONS = arrayOf(
+            Institutions(
+                title = "(В-78)",
+                address = "119454, ЦФО, г. Москва, Проспект Вернадского, д. 78",
+                location = GeoPoint(55.669956, 37.480225),
+            ),
+            Institutions(
+                title = "(В-86)",
+                address = "119571, ЦФО, г. Москва, Проспект Вернадского, д. 86",
+                location = GeoPoint(55.661445, 37.477049),
+            ),
+            Institutions(
+                title = "(С-20)",
+                address = "107996, ЦФО, г. Москва, ул. Стромынка, д.20",
+                location = GeoPoint(55.794229, 37.700772),
+            ),
+            Institutions(
+                title = "(МП-1)",
+                address = "119435, ЦФО, г. Москва, улица Малая Пироговская, д. 1, стр. 5",
+                location = GeoPoint(55.731582, 37.574840),
+            ),
+            Institutions(
+                title = "(СГ-22)",
+                address = "105275, ЦФО, г. Москва, 5-я улица Соколиной Горы, д. 22",
+                location = GeoPoint(55.764911, 37.741962),
+            ),
+            Institutions(
+                title = "(Щ-23)",
+                address = "115093, ЦФО, г.Москва, 1-й Щипковский переулок, д. 23",
+                location = GeoPoint(55.724839, 37.631927),
+            ),
+            Institutions(
+                title = "(У-7)",
+                address = "119048, ЦФО, г. Москва, ул. Усачева, д.7/1",
+                location = GeoPoint(55.728647, 37.573097),
+            ),
+            Institutions(
+                title = "(К-8)",
+                address = "355035, Ставропольский край, г. Ставрополь, Проспект Кулакова, д. 8 в квартале 601",
+                location = GeoPoint(45.050309, 41.911205),
+            ),
+            Institutions(
+                title = "(В-2)",
+                address = "г. Фрязино, ул. Вокзальная, д.2а (территория предприятия ОАО «НПП «Исток» им. Шокина»)",
+                location = GeoPoint(55.964300, 38.046877),
+            ),
+        )
     }
+
+    data class Institutions(
+        val title: String,
+        val address: String,
+        val location: GeoPoint,
+    )
 
     @RequiresApi(Build.VERSION_CODES.R)
     private val requestPermissionsLauncher: ActivityResultLauncher<Array<String>> =
@@ -126,38 +180,24 @@ class InstitutionsFragment : Fragment() {
         scaleBarOverlay.setScaleBarOffset(dm.widthPixels / 2, 10)
         mapView.overlays.add(scaleBarOverlay)
 
-        val marker1 = Marker(mapView)
-        marker1.setPosition(GeoPoint(55.794229, 37.700772))
-        marker1.setOnMarkerClickListener { _, _ ->
-            Toast.makeText(
-                requireContext(), "Я здесь учусь",
-                Toast.LENGTH_SHORT
-            ).show()
-            true
+        INSTITUTIONS.forEach {
+            val marker = Marker(mapView)
+            marker.setPosition(it.location)
+            marker.setOnMarkerClickListener { _, _ ->
+                Toast.makeText(
+                    requireContext(),
+                    it.address,
+                    Toast.LENGTH_SHORT
+                ).show()
+                true
+            }
+            mapView.overlays.add(marker)
+            marker.icon = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_institution,
+                null
+            )
+            marker.title = it.title
         }
-        mapView.overlays.add(marker1)
-        marker1.icon = ResourcesCompat.getDrawable(
-            resources,
-            org.osmdroid.library.R.drawable.osm_ic_follow_me_on,
-            null
-        )
-        marker1.title = "MIREA"
-
-        val marker2 = Marker(mapView)
-        marker2.setPosition(GeoPoint(55.669956, 37.480225))
-        marker2.setOnMarkerClickListener { _, _ ->
-            Toast.makeText(
-                requireContext(), "И здесь я учусь",
-                Toast.LENGTH_SHORT
-            ).show()
-            true
-        }
-        mapView.overlays.add(marker2)
-        marker2.icon = ResourcesCompat.getDrawable(
-            resources,
-            org.osmdroid.library.R.drawable.osm_ic_follow_me_on,
-            null
-        )
-        marker2.title = "MIREA"
     }
 }
