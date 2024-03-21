@@ -1,6 +1,0 @@
-<resources>
-  <string name="app_name">Accelerometer</string>
-  <string name="azimuth">Azimuth: %f</string>
-  <string name="pitch">Pitch: %f</string>
-  <string name="roll">Roll: %f</string>
-</resources>
