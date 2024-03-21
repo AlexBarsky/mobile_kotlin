@@ -1,6 +1,0 @@
-<resources>
-  <string name="app_name">data_thread</string>
-  <string name="runn1">Метод runOnUiThread() вызывает переданный блок кода на главном потоке (UI потоке) приложения</string>
-  <string name="runn2">Метод post() добавляет переданный Runnable в очередь сообщений для выполнения после завершения текущего цикла обработки событий</string>
-  <string name="runn3">Метод postDelayed() вызывает переданный Runnable через определенный промежуток времени после вызова метода</string>
-</resources>
