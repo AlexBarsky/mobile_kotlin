@@ -1,14 +1,9 @@
 package ru.mirea.bogomolovaa.mireaproject.ui.institutions
 
 import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +12,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
-import com.google.android.material.snackbar.Snackbar
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -30,12 +23,15 @@ import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
+import ru.mirea.bogomolovaa.mireaproject.R
 import ru.mirea.bogomolovaa.mireaproject.databinding.FragmentInstitutionsBinding
+import ru.mirea.bogomolovaa.mireaproject.utils.PermissionUtils
 
 class InstitutionsFragment : Fragment() {
 
     companion object {
         fun newInstance() = InstitutionsFragment()
+
         @RequiresApi(Build.VERSION_CODES.R)
         private var requiredPermissions = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -44,6 +40,16 @@ class InstitutionsFragment : Fragment() {
 //        Manifest.permission.MANAGE_EXTERNAL_STORAGE
         )
     }
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    private val requestPermissionsLauncher: ActivityResultLauncher<Array<String>> =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            PermissionUtils.handlePermissions(binding.root, permissions, R.string.location_permissions) {
+                onPermissionsGranted()
+            }
+        }
 
     private val viewModel: InstitutionsViewModel by viewModels()
 
@@ -86,12 +92,7 @@ class InstitutionsFragment : Fragment() {
             PreferenceManager.getDefaultSharedPreferences(requireContext())
         )
         mapView.onResume()
-
-        if (allPermissionsGranted()) {
-            onPermissionsGranted()
-        } else {
-            requestPermissions()
-        }
+        requestPermissionsLauncher.launch(requiredPermissions)
     }
 
     override fun onStop() {
@@ -159,49 +160,4 @@ class InstitutionsFragment : Fragment() {
         )
         marker2.title = "MIREA"
     }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private val requestPermissionsLauncher: ActivityResultLauncher<Array<String>> =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            val granted = permissions.entries.all {
-                it.value
-            }
-            permissions.entries.forEach {
-                Log.e("LOG_TAG", "${it.key} = ${it.value}")
-            }
-
-            if (granted) {
-                onPermissionsGranted()
-            } else {
-                Snackbar.make(
-                    binding.root,
-                    "Our app needs access to your device's location. " +
-                            "Please grant this permission in your device settings.",
-                    Snackbar.LENGTH_INDEFINITE
-                ).setAction("Go to settings") {
-                    val uri = Uri.parse("package:${requireContext().packageName}")
-
-                    startActivity(
-                        Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            uri
-                        )
-                    )
-                }.show()
-            }
-        }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun allPermissionsGranted(): Boolean =
-        requiredPermissions.all {
-            ActivityCompat.checkSelfPermission(
-                requireContext(), it
-            ) == PackageManager.PERMISSION_GRANTED
-        }
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun requestPermissions() =
-        requestPermissionsLauncher.launch(requiredPermissions)
 }

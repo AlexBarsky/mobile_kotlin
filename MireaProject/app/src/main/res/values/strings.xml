@@ -101,4 +101,18 @@ with Firebase.</string>
   <string name="placeholder_success">Placeholder text</string>
   <string name="mars_photo">Mars photo</string>
   <string name="menu_institutions">Institutions</string>
+
+  <!--Permission requests-->
+  <string name="camera_permissions">
+    Our app needs access to your device\'s microphone to record audio.\n
+    Please grant this permission in your device settings.
+  </string>
+  <string name="audio_permissions">
+    Our app needs access to your device\'s microphone to record audio.\n
+    Please grant this permission in your device settings.
+  </string>
+  <string name="location_permissions">
+    Our app needs access to your device\'s location.\n
+    Please grant this permission in your device settings
+  </string>
 </resources>
