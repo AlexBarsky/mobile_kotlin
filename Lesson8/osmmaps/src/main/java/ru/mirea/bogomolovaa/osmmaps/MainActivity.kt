@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Snackbar.make(
                     binding.root,
-                    "Our app needs access to your device's location. " +
+                    "Our app needs access to your device's location.\n" +
                             "Please grant this permission in your device settings.",
                     Snackbar.LENGTH_INDEFINITE
                 ).setAction("Go to settings") {
